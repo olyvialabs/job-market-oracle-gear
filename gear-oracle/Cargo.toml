@@ -1,0 +1,51 @@
+[package]
+name = "jobmarket"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+gstd.workspace = true
+io.workspace = true
+parity-scale-codec.workspace = true
+scale-info.workspace = true
+
+[build-dependencies]
+gear-wasm-builder.workspace = true
+io.workspace = true
+
+#[features]
+# Used for inserting constants with WASM binaries (NOT paths) of the contract in
+# the root crate. Usually these constants used in gclient tests instead of
+# strings with paths to the binaries in the "target" directory. If you don't
+# like this approach or don't use gclient tests, you can freely remove this
+# feature from here and from the rest of the code.
+#binary-vendor = []
+#wasm-opt = ["gear-wasm-builder/wasm-opt"]
+#default = ["binary-vendor", "wasm-opt"]
+
+[workspace]
+members = ["state"] 
+
+[workspace.package]
+name = "jobmarket"
+version = "1.0.0"
+edition = "2021"
+publish = false
+homepage = "https://olyvia.io"
+
+[workspace.dependencies]
+io = { path = "io" }
+gstd = { git = "https://github.com/gear-tech/gear", tag = "v1.0.2" }
+gmeta = { git = "https://github.com/gear-tech/gear", tag = "v1.0.2" }
+parity-scale-codec = { version = "3", default-features = false }
+scale-info = { version = "2", default-features = false }
+hashbrown = "0.14"
+gear-wasm-builder = { git = "https://github.com/gear-tech/gear", tag = "v1.0.2" }
+
+[workspace.dev-dependencies]
+state = { path = "state" }
+gtest = { git = "https://github.com/gear-tech/gear.git", rev = "946ac47" }
+gstd = { git = "https://github.com/gear-tech/gear", tag = "v1.0.2" }
+tokio = "1"
+gclient = { git = "https://github.com/gear-tech/gear", tag = "v1.0.2" }
