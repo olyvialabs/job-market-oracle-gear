@@ -9,7 +9,13 @@ use gstd::{prelude::*, ActorId, Decode, Encode, TypeInfo};
 pub enum JobMarketAction {
     CreateVacancy {
         vacancyName: String,
-        price: u128
+        price: u128,
+        category: u32,
+        subcategory: u32,
+        location: String,
+        date: u64,
+        vacancy_type: VacancyType,
+        url: String,
     },
 }
 

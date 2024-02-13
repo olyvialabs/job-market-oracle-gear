@@ -1,0 +1,20 @@
+enum VacancyType {
+  Freelance
+  Contractor
+  PartTime
+  FullTime
+}
+
+type Vacancy @entity {
+  id: ID!
+  date: BigInt!
+  price: BigInt!
+  vacancyName: String!
+  category: Int!
+  subcategory: Int!
+  location: String!
+  applicantsNumber: Int!
+  creator_wallet: String!
+  url: String!
+  vacancyType: VacancyType!
+}

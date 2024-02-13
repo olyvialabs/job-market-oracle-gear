@@ -42,11 +42,24 @@ impl JobMarket {
         &mut self,
         vacancyName: String,
         price: u128,
+        category: u32,
+        subcategory: u32,
+        location: String,
+        date: u64, 
+        vacancy_type: VacancyType,
+        url: String,
     ) {
 
         let vacancy = Vacancy {
-            vacancyName,
+            id: self.new_vacancy_id,
+            date, 
             price,
+            vacancyName,
+            category,
+            subcategory,
+            location,
+            url,
+            vacancy_type,
             ..Default::default()
         };
 

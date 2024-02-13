@@ -17,12 +17,11 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
   const toast = useToast();
   const [vacancy, setVacancy] = useState({
     vacancyName: "",
-    vacancyType: "", // Initializing without default to ensure user selection
+    vacancyType: "",
     price: "",
     category: "",
     subcategory: "",
     location: "",
-    applicantsNumber: "",
     url: "",
   });
 
@@ -126,27 +125,6 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
             value={vacancy.location}
             onChange={handleChange}
           />
-        </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel htmlFor="applicantsNumber">Applicants Number</FormLabel>
-          <NumberInput
-            defaultValue={0}
-            min={0}
-            onChange={(valueAsString, valueAsNumber) =>
-              handleNumberChange(
-                valueAsString,
-                valueAsNumber,
-                "applicantsNumber"
-              )
-            }
-          >
-            <NumberInputField
-              id="applicantsNumber"
-              name="applicantsNumber"
-              value={vacancy.applicantsNumber}
-            />
-          </NumberInput>
         </FormControl>
 
         <FormControl isRequired>

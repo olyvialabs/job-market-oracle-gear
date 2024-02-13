@@ -13,32 +13,13 @@ function VacancyCreatorCard() {
 
   const metadata = ProgramMetadata.from(programMeta);
 
-  const message: any = {
-    destination: programIDFT, // programId
-    payload: {
-      CreateVacancy: {
-        id: 0, // Assuming the ID is auto-generated or irrelevant for creation
-        date: Date.now(), // For simplicity, using current timestamp
-        price: 300,
-        vacancyName: "Some vacancy example V2",
-        category: 0, // Set default or collect from user
-        subcategory: 0, // Set default or collect from user
-        location: "", // Set default or collect from user
-        applicantsNumber: 0, // Set default or collect from user
-      },
-    },
-    gasLimit: 8998192450,
-    value: 0,
-  };
-
-  const signer = async () => {
+  const signer = async (message: any) => {
     const localaccount = account?.address;
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
 
     if (isVisibleAccount) {
-      // Create a message extrinsic
       const transferExtrinsic = await api.message.send(message, metadata);
 
       const injector = await web3FromSource(accounts[0].meta.source);
@@ -66,9 +47,29 @@ function VacancyCreatorCard() {
     }
   };
 
-  const handleSubmit = (e: any) => {
-    console.log({ e });
-    signer();
+  const handleSubmit = (vacancyData: any) => {
+    console.log({ vacancyData });
+    const dateInSeconds = Math.floor(new Date().getTime() / 1000);
+
+    const message: any = {
+      destination: programIDFT,
+      payload: {
+        CreateVacancy: {
+          vacancyName: vacancyData.vacancyName,
+          price: Number(vacancyData.price),
+          category: Number(vacancyData.category),
+          subcategory: Number(vacancyData.subcategory),
+          location: vacancyData.location,
+          date: dateInSeconds,
+          vacancy_type: vacancyData.vacancyType,
+          url: vacancyData.url,
+        },
+      },
+      gasLimit: 8998192450,
+      value: 0,
+    };
+
+    signer(message);
   };
 
   return (
