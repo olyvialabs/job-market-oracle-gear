@@ -18,33 +18,46 @@ function VacanciesInformationCard() {
   const { api } = useApi();
 
   const [vacancyId, setVacancyId] = useState("");
-  const [vacancyDetails, setVacancyDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [vacancyDetails, setVacancyDetails] = useState<any>(null);
+  const [searchedResults, setSearchedResults] = useState({
+    error: "",
+    message: "",
+  });
   const metadata = ProgramMetadata.from(`${programMeta}`);
   const queryVacancy = async () => {
-    api.programState
-      .read(
-        {
-          programId: programIDFT,
-          payload: "",
-        },
-        metadata
-        // {
-        //   programId: programIDFT,
-        //   wasm: contractBuffer as any,
-        //   payload: "0x",
-        //   fn_name: "vacancy_info",
-        //   argument: 0,
-        // },
-        // stateMetadata as any,
-        // metadata as any
-      )
-      //.then((codec) => codec.toHuman() as any)
+    setIsLoading(true);
+    const query = `
+    query {
+      vacancy(id: "${vacancyId}") {
+        id
+        date
+        price
+        vacancyName
+      }
+    }
+  `;
+
+    const url = "https://api.subquery.network/sq/0xPasho/test-varav4";
+    const opts = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    };
+
+    fetch(url, opts)
+      .then((res) => res.json())
       .then((result) => {
-        console.log({ result });
-        console.log({ result });
-        console.log({ result });
+        console.log(result.data); // See the console for the query result
+        setVacancyDetails(result.data.vacancy as any);
+        setSearchedResults({ message: "Success", error: "" });
       })
-      .catch(({ message }: Error) => console.log({ message }));
+      .catch((error) => {
+        setSearchedResults({ error, message: "" });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   console.log({ vacancyDetails });
@@ -61,7 +74,20 @@ function VacanciesInformationCard() {
                 value={vacancyId}
                 onChange={(e) => setVacancyId(e.target.value)}
               />
-              <Button onClick={queryVacancy}>Query Vacancy</Button>
+              <Button isLoading={isLoading} onClick={queryVacancy}>
+                Query Vacancy
+              </Button>
+              {searchedResults.error ? (
+                <span style={{ color: "red" }}>{searchedResults.error}</span>
+              ) : null}
+              {searchedResults.message ? (
+                <span>
+                  {vacancyDetails
+                    ? vacancyDetails?.name
+                    : "Nothing found with this ID"}
+                </span>
+              ) : null}
+              {isLoading ? <span>Loading data...</span> : null}
             </VStack>
           </Box>
         </Flex>
