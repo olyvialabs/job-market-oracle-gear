@@ -13,13 +13,13 @@ function Header({ isAccountVisible }: Props) {
   return (
     <header className={styles.header}>
       <div></div>
-      <Image
+      {/* <Image
         pl={{ base: "0.5rem", md: "2rem", xl: "3rem", "2xl": "4rem" }}
         position="absolute"
         h="6rem"
         src={"https://quickjobs.app/img/quickjob-beta-icon.png"}
         onClick={() => navigate("/")}
-      />
+      /> */}
       {/* <Button
         color="white"
         bgColor="transparent"

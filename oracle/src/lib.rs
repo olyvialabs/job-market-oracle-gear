@@ -28,16 +28,6 @@ impl From<JobMarket> for JobMarketState {
 static mut JOB_MARKET: Option<JobMarket> = None;
 
 impl JobMarket {
-    /// THE VACANCY CREATION
-    /// Requirements:
-    /// * The proposal can be submitted only by the existing members or their delegate addresses
-    /// * The applicant ID can't be the zero
-    /// * The DAO must have enough funds to finance the proposal
-    /// Arguments:
-    /// * `applicant`: an actor that will be funded
-    /// * `amount`: the number of fungible tokens that will be sent to the applicant
-    /// * `quorum`: a certain threshold of YES votes in order for the proposal to pass
-    /// * `details`: the proposal description
     async fn create_vacancy(
         &mut self,
         vacancyName: String,
@@ -48,6 +38,7 @@ impl JobMarket {
         date: u64, 
         vacancy_type: VacancyType,
         url: String,
+        description: String
     ) {
 
         let vacancy = Vacancy {
@@ -59,6 +50,7 @@ impl JobMarket {
             subcategory,
             location,
             url,
+            description,
             vacancy_type,
             ..Default::default()
         };
@@ -84,14 +76,21 @@ extern fn init() {
 
 #[gstd::async_main]
 async fn main() {
-    let action: JobMarketAction = msg::load().expect("Could not load Action");
+    let action: JobMarketAction = msg::load().expect("Could not load JobMarketAction");
     let jobMarket: &mut JobMarket = unsafe { JOB_MARKET.get_or_insert(JobMarket::default()) };
     match action {
         JobMarketAction::CreateVacancy {
             vacancyName,
-            price
+            price,
+            category,
+            subcategory,
+            location,
+            date,
+            vacancy_type,
+            url,
+            description
         } => {
-            jobMarket.create_vacancy(vacancyName, price).await;
+            jobMarket.create_vacancy(vacancyName, price, category, subcategory, location, date, vacancy_type, url, description).await;
         }
     }
 }

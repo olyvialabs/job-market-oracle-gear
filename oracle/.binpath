@@ -1,1 +1,1 @@
-target/wasm32-unknown-unknown/debug/jobmarket
+target/wasm32-unknown-unknown/release/jobmarket

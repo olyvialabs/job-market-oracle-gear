@@ -29,7 +29,7 @@ function InputCard() {
   };
 
   const signer = async () => {
-    const localaccount = account?.address;
+    const localaccount = account?.decodedAddress;
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
@@ -42,7 +42,7 @@ function InputCard() {
 
       transferExtrinsic
         .signAndSend(
-          account?.address ?? alert.error("No account"),
+          account?.decodedAddress ?? alert.error("No account"),
           { signer: injector.signer },
           ({ status }) => {
             if (status.isInBlock) {

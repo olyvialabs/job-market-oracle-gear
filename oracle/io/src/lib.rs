@@ -16,6 +16,7 @@ pub enum JobMarketAction {
         date: u64,
         vacancy_type: VacancyType,
         url: String,
+        description: String
     },
 }
 
@@ -43,6 +44,8 @@ pub struct Vacancy {
     pub applicantsNumber: u32,
     pub creator_wallet: ActorId,
     pub url: String,
+    pub vacancy_type: VacancyType,
+    pub description: String
 }
 
 #[derive(Debug, Clone, Decode, Encode, TypeInfo)]
@@ -55,6 +58,13 @@ pub enum VacancyType {
     FullTime,
 }
 
+impl Default for VacancyType {
+    fn default() -> Self {
+        VacancyType::Freelance
+    }
+}
+
+
 
 #[derive(Debug, Encode, Decode, TypeInfo)]
 #[codec(crate = gstd::codec)]
@@ -64,8 +74,6 @@ pub struct JobMarketState {
     pub new_vacancy_id: u128
 }
 
-
-impl JobMarketState {}
 
 pub struct ContractMetadata;
 

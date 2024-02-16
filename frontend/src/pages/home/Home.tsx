@@ -1,23 +1,24 @@
-import {} from "@chakra-ui/react";
-import { Blocknumber } from "components/gear/blockNumber";
-
-import Gusano from "../../assets/images/3d Swirl Shape.svg";
-import LogoWhite from "../../assets/images/vara street logoHOMEWhite.svg";
-import { Hero } from "./sections/Hero";
-import { Features } from "./sections/Features";
-import { Partners } from "./sections/Partners";
-import { Shilling } from "./sections/Shilling";
-import { Footer } from "./sections/Footer";
+import { Box, Text } from "@chakra-ui/react";
+import { PageInnerContent } from "components/page-display/components/PageInnerContent";
+import { VacancyCard } from "components/gear/display-quickjob/VacancyCard";
+import { useVacanciesData } from "pages/Vacancy/useVacanciesData";
 
 function Home() {
+  const { vacancies, loading } = useVacanciesData();
+
   return (
-    <>
-      <Hero />
-      <Partners />
-      <Features />
-      <Shilling />
-      <Footer />
-    </>
+    <Box>
+      <PageInnerContent title="Explore" />
+      <Box px={4} pb={4}>
+        {loading ? (
+          <Box p={4}>
+            <Text>Information is loading...</Text>
+          </Box>
+        ) : (
+          vacancies.map((item) => <VacancyCard item={item} />)
+        )}
+      </Box>
+    </Box>
   );
 }
 

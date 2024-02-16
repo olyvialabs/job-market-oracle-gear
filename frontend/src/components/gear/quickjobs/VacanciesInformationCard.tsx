@@ -60,7 +60,6 @@ function VacanciesInformationCard() {
       });
   };
 
-  console.log({ vacancyDetails });
   return (
     <Box className={styles.Moduleborderwrap}>
       <Box className={styles.module}>

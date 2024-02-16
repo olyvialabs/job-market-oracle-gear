@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useAccount, useAlert, useApi } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { Box, Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  ModalBody,
+  ModalFooter,
+  Text,
+} from "@chakra-ui/react";
 import { programIDFT, programMeta } from "consts";
 import {
   HexString,
@@ -10,6 +19,7 @@ import {
   getStateMetadata,
 } from "@gear-js/api";
 import styles from "../../layout/cards/Card.module.scss";
+import { useNavigate } from "react-router-dom";
 //import stateWasm from "./../../../assets/state/nft_state.meta.wasm";
 
 const QueryVacancy = () => {
@@ -19,6 +29,8 @@ const QueryVacancy = () => {
   const [vacancyDetails, setVacancyDetails] = useState(null);
   const metadata = ProgramMetadata.from(`0x${programMeta}`);
   const queryVacancy = async () => {
+    window.location.href = "/vacancy/" + vacancyId;
+    return;
     api.programState
       .read(
         {
@@ -47,21 +59,27 @@ const QueryVacancy = () => {
 
   console.log({ vacancyDetails });
   return (
-    <Box className={styles.Moduleborderwrap}>
-      <Box className={styles.module}>
-        <Heading>Query a Vacancy</Heading>
-        <Text fontWeight="light">Find vacancy info</Text>
-        <Flex mt="1rem">
-          <Input
-            placeholder="Enter Vacancy ID"
-            value={vacancyId}
-            style={{ color: "white" }}
-            onChange={(e) => setVacancyId(e.target.value)}
-          />
-          <Button onClick={queryVacancy}>Query Vacancy</Button>
-        </Flex>
-      </Box>
-    </Box>
+    <>
+      <ModalBody>
+        <Input
+          placeholder="Enter Vacancy ID"
+          value={vacancyId}
+          ringColor="orange.400"
+          focusBorderColor="orange.400"
+          onChange={(e) => setVacancyId(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              queryVacancy();
+            }
+          }}
+        />
+      </ModalBody>
+      <ModalFooter>
+        <Button colorScheme="orange" w="100%" onClick={queryVacancy}>
+          🧐 Search Vacancy
+        </Button>
+      </ModalFooter>
+    </>
   );
 };
 

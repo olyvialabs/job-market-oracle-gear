@@ -35,7 +35,7 @@ function SyntheticBalanceToken() {
       .catch(({ message }: Error) => alert.error(message));
 
     Localbalances.some(([address, balances]: any) => {
-      if (encodeAddress(address) === account?.address) {
+      if (encodeAddress(address) === account?.decodedAddress) {
         setBalance(balances);
 
         return true;

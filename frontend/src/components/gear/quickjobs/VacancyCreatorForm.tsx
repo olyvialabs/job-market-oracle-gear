@@ -5,16 +5,25 @@ import {
   FormControl,
   FormLabel,
   Input,
+  ModalBody,
+  ModalFooter,
   NumberInput,
   NumberInputField,
   Select,
   Text,
+  Textarea,
   VStack,
   useToast,
 } from "@chakra-ui/react";
+import { categories, subcategories } from "data/categories";
 
-const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
+const VacancyCreatorForm = ({
+  onSubmit,
+}: {
+  onSubmit: (e: any, cb: () => void) => void;
+}) => {
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [vacancy, setVacancy] = useState({
     vacancyName: "",
     vacancyType: "",
@@ -23,11 +32,15 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
     subcategory: "",
     location: "",
     url: "",
+    description: "",
   });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setVacancy({ ...vacancy, [name]: value });
+    if (name === "category") {
+      setVacancy((prev) => ({ ...prev, subcategory: "" }));
+    }
   };
 
   const handleNumberChange = (
@@ -41,6 +54,7 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
   const handleSubmit = () => {
     // Here, you would typically interact with your smart contract
     console.log("Vacancy to be created:", vacancy);
+    setIsLoading(true);
     toast({
       title: "Vacancy Prepared",
       description:
@@ -50,14 +64,16 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
       isClosable: true,
     });
 
-    onSubmit(vacancy);
+    onSubmit(vacancy, () => {
+      setIsLoading(false);
+    });
 
     // Reset form or navigate to another page as needed
   };
 
   return (
-    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" w="100%">
-      <VStack spacing={4}>
+    <>
+      <ModalBody>
         <FormControl isRequired>
           <FormLabel htmlFor="vacancyName">Vacancy Name</FormLabel>
           <Input
@@ -68,7 +84,18 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
           />
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl mt={4} isRequired>
+          <FormLabel htmlFor="description">Description</FormLabel>
+          <Textarea
+            id="description"
+            name="description"
+            value={vacancy.description}
+            onChange={handleChange}
+            placeholder="Enter the job description"
+          />
+        </FormControl>
+
+        <FormControl mt={4} isRequired>
           <FormLabel htmlFor="vacancyType">Vacancy Type</FormLabel>
           <Select
             id="vacancyType"
@@ -84,7 +111,7 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
           </Select>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl mt={4} isRequired>
           <FormLabel htmlFor="price">Price</FormLabel>
           <NumberInput
             defaultValue={0}
@@ -97,27 +124,42 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
           </NumberInput>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl mt={4} isRequired>
           <FormLabel htmlFor="category">Category</FormLabel>
-          <Input
+          <Select
             id="category"
             name="category"
             value={vacancy.category}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.title}
+              </option>
+            ))}
+          </Select>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl mt={4} isRequired>
           <FormLabel htmlFor="subcategory">Subcategory</FormLabel>
-          <Input
+          <Select
             id="subcategory"
             name="subcategory"
             value={vacancy.subcategory}
             onChange={handleChange}
-          />
+            isDisabled={!vacancy.category} // Disable until a category is selected
+          >
+            <option value="">Select a subcategory</option>
+            {subcategories[vacancy.category]?.map((subcat) => (
+              <option key={subcat.id} value={subcat.id}>
+                {subcat.title}
+              </option>
+            ))}
+          </Select>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl mt={4} isRequired>
           <FormLabel htmlFor="location">Location</FormLabel>
           <Input
             id="location"
@@ -127,7 +169,7 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
           />
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl mt={4} isRequired>
           <FormLabel htmlFor="url">URL</FormLabel>
           <Input
             id="url"
@@ -136,18 +178,19 @@ const VacancyCreatorForm = ({ onSubmit }: { onSubmit: (e: any) => void }) => {
             onChange={handleChange}
           />
         </FormControl>
-
+      </ModalBody>
+      <ModalFooter>
         <Button
+          colorScheme="orange"
           mt={4}
-          backgroundColor={"black"}
-          color="white"
           onClick={handleSubmit}
           w="100%"
+          isLoading={isLoading}
         >
           💼 Create Vacancy
         </Button>
-      </VStack>
-    </Box>
+      </ModalFooter>
+    </>
   );
 };
 

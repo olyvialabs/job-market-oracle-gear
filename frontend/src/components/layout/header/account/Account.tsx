@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { useAccount } from '@gear-js/react-hooks';
-import { AccountsModal } from './accounts-modal';
-import { Wallet } from './wallet';
-import styles from './wallet/Wallet.module.scss';
+import { useState } from "react";
+import { useAccount } from "@gear-js/react-hooks";
+import { AccountsModal } from "./accounts-modal";
+import { Wallet } from "./wallet";
+import styles from "./wallet/Wallet.module.scss";
 
 function Account() {
-  const { account, accounts } = useAccount();
+  const { account: accountUntyped, accounts } = useAccount();
+  const account = accountUntyped as any;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -19,9 +20,20 @@ function Account() {
   return (
     <>
       {account ? (
-        <Wallet balance={account.balance} address={account.address} name={account.meta.name} onClick={openModal} />
+        <Wallet
+          balance={account.balance}
+          address={account.decodedAddress}
+          name={account.meta.name}
+          onClick={openModal}
+        />
       ) : (
-        <button className={styles.connectWallet} type="button" onClick={openModal}> Connect Your Wallet</button>
+        <button
+          className={styles.connectWallet}
+          type="button"
+          onClick={openModal}
+        >
+          Connect Your Wallet
+        </button>
       )}
       {isModalOpen && <AccountsModal accounts={accounts} close={closeModal} />}
     </>

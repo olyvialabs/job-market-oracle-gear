@@ -1,14 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./home";
-import { Main } from "./main";
-import { Dapp } from "./dapp";
-import { Mint } from "./mint";
+import { VacancyInformation } from "./Vacancy";
+import { Graphs } from "./graphs/Graphs";
 
 const routes = [
-  { path: "/", Page: Dapp },
-  { path: "/main", Page: Dapp },
-  { path: "/dapp", Page: Dapp },
-  { path: "/mint", Page: Dapp },
+  { path: "/", Page: Home },
+  { path: "/explore", Page: Home },
+  { path: "/graphs", Page: Graphs },
+  { path: "/vacancy/:id", Page: VacancyInformation },
 ];
 
 function Routing() {

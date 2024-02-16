@@ -4,9 +4,12 @@ import { App } from "./App";
 
 const container = document.getElementById("root");
 const root = createRoot(container as HTMLElement);
+const NewApp = App as unknown as any;
 
 root.render(
-  <ChakraProvider>
-    <App />
-  </ChakraProvider>
+  (
+    <ChakraProvider>
+      <NewApp />
+    </ChakraProvider>
+  ) as any
 );

@@ -3,8 +3,11 @@ import { Routing } from "pages";
 import { Header, ApiLoader } from "components";
 import { withProviders } from "hocs";
 import "App.css";
+import { WholeAppContaniner } from "components/page-display/WholeAppContainer";
+import { Chart, registerables } from "chart.js";
 
 function Component() {
+  Chart.register(...registerables);
   const { isApiReady } = useApi();
   const { isAccountReady } = useAccount();
 
@@ -12,8 +15,10 @@ function Component() {
 
   return (
     <>
-      <Header isAccountVisible={isAccountReady} />
-      <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
+      {/* <Header isAccountVisible={isAccountReady} /> */}
+      <WholeAppContaniner>
+        <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
+      </WholeAppContaniner>
     </>
   );
 }

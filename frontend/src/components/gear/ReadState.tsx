@@ -24,9 +24,9 @@ function ReadState() {
   const [syntheticLocked, setSyntheticLocked] = useState();
 
   useEffect(() => {
-    if (account?.address) {
-      setWalletAddress(account.address);
-      setWalletDecoded(decodeAddress(account.address));
+    if (account?.decodedAddress) {
+      setWalletAddress(account.decodedAddress);
+      setWalletDecoded(decodeAddress(account.decodedAddress));
     }
   }, [account]);
 
@@ -108,7 +108,7 @@ function ReadState() {
 
   // console.log(userStatus);
   return (
-    <Flex>
+    <Flex as="div">
       <Heading fontSize="1rem" color="white">
         {" "}
         Vara Street TVL:

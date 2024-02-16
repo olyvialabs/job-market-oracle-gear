@@ -1,6 +1,8 @@
-import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { LOCAL_STORAGE } from 'consts';
+//import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { LOCAL_STORAGE } from "consts";
+type InjectedAccountWithMeta = any;
 
-const isLoggedIn = ({ address }: InjectedAccountWithMeta) => localStorage[LOCAL_STORAGE.ACCOUNT] === address;
+const isLoggedIn = ({ address }: InjectedAccountWithMeta) =>
+  localStorage[LOCAL_STORAGE.ACCOUNT] === address;
 
 export { isLoggedIn };
