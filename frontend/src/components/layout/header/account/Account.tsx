@@ -35,7 +35,9 @@ function Account() {
           Connect Your Wallet
         </button>
       )}
-      {isModalOpen && <AccountsModal accounts={accounts} close={closeModal} />}
+      {(isModalOpen || !account) && (
+        <AccountsModal accounts={accounts} close={closeModal} />
+      )}
     </>
   );
 }
