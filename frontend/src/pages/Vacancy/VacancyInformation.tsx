@@ -7,10 +7,11 @@ import { programIDFT, programMeta } from "consts";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useVacanciesData } from "./useVacanciesData";
+import { VacancyComments } from "./VacancyComments";
 
 function VacancyInformation() {
   let { id } = useParams();
-  const { vacancies, loading } = useVacanciesData();
+  const { vacancies, loading, refetch } = useVacanciesData();
 
   if (loading) {
     return (
@@ -24,7 +25,7 @@ function VacancyInformation() {
   }
 
   console.log({ vacancies });
-  const vacancyItem = vacancies.find(
+  const vacancyItem: any = vacancies.find(
     (item: any) => item.id === parseInt(id as unknown as any)
   );
 
@@ -42,7 +43,13 @@ function VacancyInformation() {
     <Box>
       <PageInnerContent title="Vacancy Information" goBack />
       <Box p={{ base: 6, md: 10 }}>
-        <VacancyCardContent item={vacancyItem} />
+        <VacancyCardContent
+          item={vacancyItem}
+          bigger
+          onRefresh={() => {
+            refetch();
+          }}
+        />
         <Button
           w="100%"
           mt={8}
@@ -72,6 +79,13 @@ function VacancyInformation() {
         >
           Apply now
         </Button>
+        <VacancyComments
+          vacancyId={vacancyItem.id || 0}
+          comments={vacancyItem.comments || []}
+          refresh={() => {
+            refetch();
+          }}
+        />
       </Box>
     </Box>
   );

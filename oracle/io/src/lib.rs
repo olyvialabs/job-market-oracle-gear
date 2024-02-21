@@ -18,6 +18,8 @@ pub enum JobMarketAction {
         url: String,
         description: String
     },
+    LikeVacancy { vacancy_id: u128 },
+    CommentOnVacancy { vacancy_id: u128, comment: String },
 }
 
 
@@ -28,6 +30,23 @@ pub enum JobMarketEvent {
     CreateVacancy {
         vacancy_id: u128
     },
+}
+
+#[derive(Debug, Clone, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub struct Like {
+    pub user: ActorId,
+    pub date: u64,
+}
+
+#[derive(Debug, Clone, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub struct Comment {
+    pub user: ActorId,
+    pub comment: String,
+    pub date: u64,
 }
 
 #[derive(Debug, Default, Clone, Decode, Encode, TypeInfo)]
@@ -45,7 +64,9 @@ pub struct Vacancy {
     pub creator_wallet: ActorId,
     pub url: String,
     pub vacancy_type: VacancyType,
-    pub description: String
+    pub description: String,
+    pub likes: Vec<Like>,
+    pub comments: Vec<Comment>, 
 }
 
 #[derive(Debug, Clone, Decode, Encode, TypeInfo)]

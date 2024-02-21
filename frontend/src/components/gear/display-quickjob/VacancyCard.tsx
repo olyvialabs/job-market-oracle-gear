@@ -12,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { categories, subcategories } from "data/categories";
+import { VacancyLikes } from "pages/Vacancy/VacancyLikes";
 import { useNavigate } from "react-router-dom";
 
 type VacancyType = "Freelance" | "Contractor" | "PartTime" | "FullTime";
@@ -23,7 +24,15 @@ const vacancyTypeTitles: Record<VacancyType, string> = {
   FullTime: "Full Time",
 };
 
-const VacancyCardContent = ({ item }: { item: any }) => {
+const VacancyCardContent = ({
+  item,
+  bigger,
+  onRefresh,
+}: {
+  item: any;
+  bigger?: boolean;
+  onRefresh?: any;
+}) => {
   const category = categories.find((c) => c.id === String(item.category));
   const subcategoryArray = subcategories[String(item.category)];
   const subcategory = subcategoryArray?.find(
@@ -34,16 +43,51 @@ const VacancyCardContent = ({ item }: { item: any }) => {
     return vacancyTypeTitles[value] || "Contractor";
   }
 
+  const countOccurrences = (item.likes || []).reduce(
+    (acc: any, { user }: any) => {
+      acc[user] = acc[user] ? 0 : 1;
+      return acc;
+    },
+    {}
+  );
+
+  // Filtrar direcciones que aparecen un número impar de veces y obtener sus claves (direcciones)
+  const uniqueImparAddresses = Object.entries(countOccurrences)
+    .filter(([_, count]) => (count as any) % 2 !== 0)
+    .map(([address, _]) => address);
+
   return (
     <Stack spacing="3">
-      <Heading size="lg" color="orange.400">
-        {item.vacancyName}
-      </Heading>
+      {bigger ? (
+        <Box display="flex" flexDir="row" justifyContent="space-between">
+          <Heading size="lg" color="orange.400">
+            {item.vacancyName}
+          </Heading>
+          <Box display="flex" flexDir="column">
+            <VacancyLikes
+              likes={item.likes}
+              refresh={onRefresh}
+              vacancyId={item.id}
+            />
+          </Box>
+        </Box>
+      ) : (
+        <Heading size="lg" color="orange.400">
+          {item.vacancyName}
+        </Heading>
+      )}
+
       <Text>{item.description}</Text>
       <Text fontWeight="bold" fontSize="xl">
         {getVacancyTypeTitle(item.vacancyType)} for ${"" + item.price}.
       </Text>
       <Text fontSize="lg">📍 Location: {item.location}</Text>
+      {!bigger ? (
+        <Text>
+          {uniqueImparAddresses.length || 0} likes ·{" "}
+          {item.comments?.length || 0} comments
+        </Text>
+      ) : null}
       <Box>
         {category && (
           <Tag size={"sm"} variant="outline" colorScheme="orange">

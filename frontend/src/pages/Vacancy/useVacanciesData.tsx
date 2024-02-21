@@ -26,12 +26,14 @@ const useVacanciesData = () => {
     console.log({ a: wholeData.vacancies });
     console.log({ a: data?.toJSON() });
 
-    let allData = (wholeData?.vacancies || []).map((item: any) => item[1]);
+    let allData =
+      (wholeData?.vacancies || []).map((item: any) => item[1]) || [];
+    allData = allData.sort((a: any, b: any) => a.id - b.id);
     setVacancies(allData);
     setIsLoading(false);
   };
 
-  return { vacancies, loading };
+  return { vacancies, loading, refetch: queryVacancy };
 };
 
 export { useVacanciesData };
