@@ -110,8 +110,8 @@ const LikesListModal = ({
             </List>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Cerrar
+            <Button colorScheme="orange" mr={3} onClick={onClose}>
+              Close
             </Button>
           </ModalFooter>
         </ModalContent>
