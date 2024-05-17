@@ -74,6 +74,14 @@ impl JobMarket {
         if let Some(vacancy) = self.vacancies.get_mut(&vacancy_id) {
             vacancy.likes.push(Like { user, date });
         }
+        msg::reply(
+            JobMarketEvent::VacancyLiked {
+                vacancy_id,
+                user,
+            },
+            0,
+        )
+        .unwrap();
     }
 
     async fn comment_on_vacancy(&mut self, vacancy_id: u128, comment_text: String) {
@@ -85,8 +93,37 @@ impl JobMarket {
                 user,
                 comment: comment_text,
                 date,
+                likes: Vec::new()
             };
             vacancy.comments.push(comment);
+            msg::reply(
+                JobMarketEvent::CommentedVacancy {
+                    vacancy_id,
+                    user,
+                },
+                0,
+            )
+            .unwrap();
+        }
+    }
+
+    async fn like_comment(&mut self, vacancy_id: u128, comment_index: usize) {
+        let user = msg::source();
+        let date = exec::block_timestamp();
+
+        if let Some(vacancy) = self.vacancies.get_mut(&vacancy_id) {
+            if let Some(comment) = vacancy.comments.get_mut(comment_index) {
+                comment.likes.push(Like { user, date });
+                msg::reply(
+                    JobMarketEvent::CommentLiked {
+                        vacancy_id,
+                        comment_index: comment_index.try_into().unwrap(),
+                        user,
+                    },
+                    0,
+                )
+                .unwrap();
+            }
         }
     }
 }
@@ -121,6 +158,14 @@ async fn main() {
         JobMarketAction::CommentOnVacancy { vacancy_id, comment } => {
             job_market.comment_on_vacancy(vacancy_id, comment).await;
         },
+        JobMarketAction::LikeComment {
+            vacancy_id,
+            comment_index,
+        } => {
+            job_market
+                .like_comment(vacancy_id, comment_index.try_into().unwrap())
+                .await;
+        }
     }
 }
 

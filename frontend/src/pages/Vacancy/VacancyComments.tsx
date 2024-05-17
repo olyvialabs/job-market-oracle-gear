@@ -15,50 +15,8 @@ import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata } from "@gear-js/api";
 import { programIDFT, programMeta } from "consts";
+import { CommentsList } from "./CommentsList";
 
-const formatDate = (timestamp: any) => {
-  const date = new Date(timestamp);
-  return date.toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
-const truncateAddress = (address: string) => {
-  const start = address.slice(0, 6);
-  const end = address.slice(-4);
-  return `${start}...${end}`;
-};
-
-const CommentsList = ({ comments }: { comments: Array<any> }) => {
-  return (
-    <VStack
-      divider={<Divider borderColor="gray.200" />}
-      spacing={4}
-      align="stretch"
-    >
-      {comments.map((comment, index) => (
-        <HStack key={index} spacing={4}>
-          <Avatar name={comment.user} />
-          <Box>
-            <Tooltip label={comment.user} aria-label="the user address">
-              <Text fontWeight="bold" cursor="pointer">
-                {truncateAddress(comment.user)}
-              </Text>
-            </Tooltip>
-            <Text color="gray.500" fontSize="sm">
-              {formatDate(comment.date)}
-            </Text>
-            <Text mt={2}>{comment.comment}</Text>
-          </Box>
-        </HStack>
-      ))}
-    </VStack>
-  );
-};
 function VacancyComments({
   vacancyId,
   refresh,
@@ -184,7 +142,11 @@ function VacancyComments({
           )}
         </Box>
       </HStack>
-      <CommentsList comments={comments} />
+      <CommentsList
+        comments={comments}
+        refresh={refresh}
+        vacancyId={vacancyId}
+      />
     </>
   );
 }

@@ -20,6 +20,7 @@ pub enum JobMarketAction {
     },
     LikeVacancy { vacancy_id: u128 },
     CommentOnVacancy { vacancy_id: u128, comment: String },
+    LikeComment { vacancy_id: u128, comment_index: u128 },
 }
 
 
@@ -30,6 +31,9 @@ pub enum JobMarketEvent {
     CreateVacancy {
         vacancy_id: u128
     },
+    VacancyLiked { vacancy_id: u128, user: ActorId },
+    CommentedVacancy { vacancy_id: u128, user: ActorId },
+    CommentLiked { vacancy_id: u128, comment_index: u128, user: ActorId },
 }
 
 #[derive(Debug, Clone, Decode, Encode, TypeInfo)]
@@ -47,6 +51,7 @@ pub struct Comment {
     pub user: ActorId,
     pub comment: String,
     pub date: u64,
+    pub likes: Vec<Like>,
 }
 
 #[derive(Debug, Default, Clone, Decode, Encode, TypeInfo)]
