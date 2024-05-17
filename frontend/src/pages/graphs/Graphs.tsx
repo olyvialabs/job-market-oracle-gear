@@ -11,6 +11,8 @@ import {
   AccordionPanel,
   AccordionIcon,
   Button,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { PageInnerContent } from "components/page-display/components/PageInnerContent";
 import { useVacanciesData } from "pages/Vacancy/useVacanciesData";
@@ -114,22 +116,20 @@ function Graphs() {
         ) : (
           <VStack spacing={4} mt={4} align="stretch" w="100%">
             <Box>
-              <Text
-                fontSize="2xl"
-                fontWeight="bold"
-                color="orange.400"
-                textAlign="center"
-              >
+              <Text fontSize="2xl" fontWeight="bold" color="orange.400">
                 Vacancy Salary Ranges
               </Text>
-              <Text fontSize="md" mt={2} textAlign="center">
+              <Alert alignItems="start" rounded="lg" status="info">
+                <div>
+                  <AlertIcon />
+                </div>
                 This visualization provides insights into the distribution of
                 salary ranges across all listed vacancies. It highlights the
                 current market trends for compensation in various roles, aiding
                 job seekers and employers in making informed decisions. Explore
                 the graph to understand how salaries are distributed and to
                 gauge the competitive landscape of job compensation.
-              </Text>
+              </Alert>
             </Box>
             <Accordion
               index={currentOpened}

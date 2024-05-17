@@ -4,6 +4,8 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Grid,
+  GridItem,
   Input,
   ModalBody,
   ModalFooter,
@@ -74,110 +76,119 @@ const VacancyCreatorForm = ({
   return (
     <>
       <ModalBody>
-        <FormControl isRequired>
-          <FormLabel htmlFor="vacancyName">Vacancy Name</FormLabel>
-          <Input
-            id="vacancyName"
-            name="vacancyName"
-            value={vacancy.vacancyName}
-            onChange={handleChange}
-          />
-        </FormControl>
+        <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+          <GridItem>
+            <FormControl isRequired>
+              <FormLabel htmlFor="vacancyName">Vacancy Name</FormLabel>
+              <Input
+                id="vacancyName"
+                name="vacancyName"
+                value={vacancy.vacancyName}
+                onChange={handleChange}
+              />
+            </FormControl>
 
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="description">Description</FormLabel>
-          <Textarea
-            id="description"
-            name="description"
-            value={vacancy.description}
-            onChange={handleChange}
-            placeholder="Enter the job description"
-          />
-        </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel htmlFor="description">Description</FormLabel>
+              <Textarea
+                id="description"
+                name="description"
+                value={vacancy.description}
+                onChange={handleChange}
+                placeholder="Enter the job description"
+              />
+            </FormControl>
 
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="vacancyType">Vacancy Type</FormLabel>
-          <Select
-            id="vacancyType"
-            name="vacancyType"
-            value={vacancy.vacancyType}
-            onChange={handleChange}
-          >
-            <option value="">Select type</option>
-            <option value="Freelance">Freelance</option>
-            <option value="Contractor">Contractor</option>
-            <option value="PartTime">Part Time</option>
-            <option value="FullTime">Full Time</option>
-          </Select>
-        </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel htmlFor="vacancyType">Vacancy Type</FormLabel>
+              <Select
+                id="vacancyType"
+                name="vacancyType"
+                value={vacancy.vacancyType}
+                onChange={handleChange}
+              >
+                <option value="">Select type</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Contractor">Contractor</option>
+                <option value="PartTime">Part Time</option>
+                <option value="FullTime">Full Time</option>
+              </Select>
+            </FormControl>
 
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="price">Price</FormLabel>
-          <NumberInput
-            defaultValue={0}
-            min={0}
-            onChange={(valueAsString, valueAsNumber) =>
-              handleNumberChange(valueAsString, valueAsNumber, "price")
-            }
-          >
-            <NumberInputField id="price" name="price" value={vacancy.price} />
-          </NumberInput>
-        </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel htmlFor="price">Price</FormLabel>
+              <NumberInput
+                defaultValue={0}
+                min={0}
+                onChange={(valueAsString, valueAsNumber) =>
+                  handleNumberChange(valueAsString, valueAsNumber, "price")
+                }
+              >
+                <NumberInputField
+                  id="price"
+                  name="price"
+                  value={vacancy.price}
+                />
+              </NumberInput>
+            </FormControl>
+          </GridItem>
+          <GridItem>
+            <FormControl isRequired>
+              <FormLabel htmlFor="category">Category</FormLabel>
+              <Select
+                id="category"
+                name="category"
+                value={vacancy.category}
+                onChange={handleChange}
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.title}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
 
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="category">Category</FormLabel>
-          <Select
-            id="category"
-            name="category"
-            value={vacancy.category}
-            onChange={handleChange}
-          >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.title}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel htmlFor="subcategory">Subcategory</FormLabel>
+              <Select
+                id="subcategory"
+                name="subcategory"
+                value={vacancy.subcategory}
+                onChange={handleChange}
+                isDisabled={!vacancy.category} // Disable until a category is selected
+              >
+                <option value="">Select a subcategory</option>
+                {subcategories[vacancy.category]?.map((subcat) => (
+                  <option key={subcat.id} value={subcat.id}>
+                    {subcat.title}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
 
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="subcategory">Subcategory</FormLabel>
-          <Select
-            id="subcategory"
-            name="subcategory"
-            value={vacancy.subcategory}
-            onChange={handleChange}
-            isDisabled={!vacancy.category} // Disable until a category is selected
-          >
-            <option value="">Select a subcategory</option>
-            {subcategories[vacancy.category]?.map((subcat) => (
-              <option key={subcat.id} value={subcat.id}>
-                {subcat.title}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel htmlFor="location">Location</FormLabel>
+              <Input
+                id="location"
+                name="location"
+                value={vacancy.location}
+                onChange={handleChange}
+              />
+            </FormControl>
 
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="location">Location</FormLabel>
-          <Input
-            id="location"
-            name="location"
-            value={vacancy.location}
-            onChange={handleChange}
-          />
-        </FormControl>
-
-        <FormControl mt={4} isRequired>
-          <FormLabel htmlFor="url">URL</FormLabel>
-          <Input
-            id="url"
-            name="url"
-            value={vacancy.url}
-            onChange={handleChange}
-          />
-        </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel htmlFor="url">URL</FormLabel>
+              <Input
+                id="url"
+                name="url"
+                value={vacancy.url}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </GridItem>
+        </Grid>
       </ModalBody>
       <ModalFooter>
         <Button

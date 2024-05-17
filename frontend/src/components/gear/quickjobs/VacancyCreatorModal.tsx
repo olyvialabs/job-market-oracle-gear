@@ -35,7 +35,7 @@ function VacancyCreatorModal() {
         item={{ content: "New", path: "", icon: AddIcon }}
         onClick={() => onOpen()}
       />
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} size="4xl" onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create new Vacancy</ModalHeader>
